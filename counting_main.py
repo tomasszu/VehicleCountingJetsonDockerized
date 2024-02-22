@@ -8,7 +8,7 @@ from feed_access import keys #File not uploaded to Github
 
 #============================================================================= <<<<<<<<<<<<<<<<<<<<<<<<<<
 #Choose camera recording 1. to 3. or 5.
-CAM = 3
+CAM = 2
 #============================================================================= <<<<<<<<<<<<<<<<<<<<<<<<<<
 
 def printout(incount, outcount):
@@ -181,7 +181,7 @@ curr_out_count = 0
 
 username = keys.USER
 password = keys.PASS
-camera_address = f"rtsp://{username}:{password}@vtfw.edi.lv:{port}/axis-media/media.amp?videocodec=h264&resolution=1280x960&compression=50"
+camera_address = f"rtsp://{username}:{password}@vtfw.edi.lv:{port}/axis-media/media.amp?resolution=1280x960&compression=25"
 
 cap = cv2.VideoCapture(camera_address)
 

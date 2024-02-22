@@ -41,7 +41,7 @@ requests==2.31.0
 scipy==1.12.0
 seaborn==0.13.2
 six==1.16.0
-supervision==0.18.0
+-e git+https://github.com/roboflow/supervision.git@8599345a3c00c26e7a05d7c81e23bf1d5cf8b8e2#egg=supervision
 sympy==1.12
 thop==0.1.1.post2209072238
 torch==2.2.0
