@@ -6,7 +6,7 @@ from datetime import datetime
 
 #============================================================================= <<<<<<<<<<<<<<<<<<<<<<<<<<
 #Choose camera recording 1. to 3. or 5.
-CAM = 1
+CAM = 5
 #============================================================================= <<<<<<<<<<<<<<<<<<<<<<<<<<
 
 def printout(incount, outcount):
@@ -142,7 +142,7 @@ if CAM == 1:
     attention_vector2 = [[0,505],[1140,0]], ">"
     cap = cv2.VideoCapture(f'cam{CAM}_cuts2.avi')
 elif CAM == 2:
-    start, end = sv.Point(x=-500, y=411), sv.Point(x=1878, y=198)
+    start, end = sv.Point(x=-500, y=711), sv.Point(x=1878, y=198)
     cap = cv2.VideoCapture(f'cam{CAM}_cuts2.avi')
     attention_vector1 = [[0,120],[1279,570]], ">"
     attention_vector2 = [[63,0],[412,960]], "<"

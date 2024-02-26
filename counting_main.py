@@ -145,7 +145,7 @@ if CAM == 1:
     port = keys.PORT1
     f = open(f"output_files/output_cam{CAM}.txt", "w")
 elif CAM == 2:
-    start, end = sv.Point(x=-500, y=411), sv.Point(x=1878, y=198)
+    start, end = sv.Point(x=-500, y=711), sv.Point(x=1878, y=198)
     attention_vector1 = [[0,120],[1279,570]], ">"
     attention_vector2 = [[63,0],[412,960]], "<"
     port = keys.PORT2
