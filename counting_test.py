@@ -3,24 +3,28 @@ import supervision as sv
 from ultralytics import YOLO
 import numpy as np
 from datetime import datetime
+import time
+import argparse
+
 
 #============================================================================= <<<<<<<<<<<<<<<<<<<<<<<<<<
 #Choose camera recording 1. to 3. or 5.
-CAM = 5
+CAM = 1
 #============================================================================= <<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
 
 def printout(incount, outcount):
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
-    f.write(("\n************Update at " + current_time + "*************\n"))
-    f.write("Stats:" +
+    F.write(("\n************Update at " + current_time + "*************\n"))
+    F.write("Stats:" +
             "{\n" +
             "Total vehicles: "+ str(incount+outcount) + "\n" +
             "Vehicles inbound: "+ str(incount) + "\n" +
             "Vehicles outbound: "+ str(outcount) + "\n" +
-            #"Vehicles with unknown direction: "+ str(unknown_vehicles) + "\n" +
             "}\n")
-    f.flush()
+    F.flush()
 
 
 def calculate_center(detection):
@@ -62,7 +66,6 @@ def is_point_in_attention(point, vector1, vector2):
 
     # If the cross product is positive, the point is on the same side as the frame
     return cross_product
-    #return cross_product
 
 def filter_detections(detections, vector_start, vector_end):
     indices_to_remove = []
@@ -84,10 +87,10 @@ def filter_detections(detections, vector_start, vector_end):
     return detections
 
 def detections_process(model, frame, tracker):
-    confidence_threshold = 0.6
+    confidence_threshold = 0.4
 
-    #results = model()
     results = model(frame)[0]
+    #print(results.boxes)
 
     detections = sv.Detections.from_ultralytics(results)
     #print(detections)
@@ -98,7 +101,7 @@ def detections_process(model, frame, tracker):
     detections = filter_detections(detections, attention_vector1, attention_vector2)
     detections = tracker.update_with_detections(detections)
 
-    count_line.trigger(detections)
+    COUNT_LINE.trigger(detections)
 
     return detections
 
@@ -108,8 +111,6 @@ def frame_annotations(detections, frame):
     label_annotator = sv.LabelAnnotator()
     trace_annotator = sv.TraceAnnotator()
 
-    #print(detections)
-
     # format custom labels
     labels = [
         f"#{tracker_id} {CLASS_NAMES_DICT[class_id]} {confidence:0.2f}"
@@ -117,7 +118,7 @@ def frame_annotations(detections, frame):
         in detections
     ]
 
-    frame = line_annotator.annotate(frame, count_line)
+    frame = LINE_ANNOTATOR.annotate(frame, COUNT_LINE)
 
     annotated_frame = box_annotator.annotate(
         scene=frame.copy(), detections=detections
@@ -140,9 +141,9 @@ if CAM == 1:
     start, end = sv.Point(x=-500, y=292), sv.Point(x=1878, y=292)
     attention_vector1 = [[0,175],[1279,175]], ">"
     attention_vector2 = [[0,505],[1140,0]], ">"
-    cap = cv2.VideoCapture(f'cam{CAM}_cuts2.avi')
+    cap = cv2.VideoCapture(f'cam{CAM}_cuts.mp4')
 elif CAM == 2:
-    start, end = sv.Point(x=-500, y=411), sv.Point(x=1878, y=198)
+    start, end = sv.Point(x=-500, y=711), sv.Point(x=1878, y=198)
     cap = cv2.VideoCapture(f'cam{CAM}_cuts2.avi')
     attention_vector1 = [[0,120],[1279,570]], ">"
     attention_vector2 = [[63,0],[412,960]], "<"
@@ -157,46 +158,71 @@ elif CAM == 5:
     attention_vector2 = None
     cap = cv2.VideoCapture(f'cam{CAM}_cuts2.avi')
 
-model = YOLO("yolov8x.pt")
-tracker = sv.ByteTrack()
-
-f = open("output.txt", "w")
+MODEL = YOLO("yolov8n.pt")
 
 # dict maping class_id to class_name
-CLASS_NAMES_DICT = model.model.names
+CLASS_NAMES_DICT = MODEL.model.names
+
 # class_ids of interest - car, motorcycle, bus and truck
 CLASS_ID = [2, 3, 5, 7]
 
+COUNT_LINE = sv.LineZone(start=start, end=end)
 
-count_line = sv.LineZone(start=start, end=end)
+LINE_ANNOTATOR = sv.LineZoneAnnotator(thickness=2, text_thickness=2, text_scale=0.5)
 
-line_annotator = sv.LineZoneAnnotator(thickness=2, text_thickness=2, text_scale=0.5)
+TRACKER = sv.ByteTrack()
 
-curr_in_count = 0
-curr_out_count = 0
+F = open(f"output_files/output_cam{CAM}.txt", "w")
 
-ret, frame = cap.read()
+FOURCC = cv2.VideoWriter_fourcc(*'XVID')  # You can use other codecs like 'MJPG' or 'MP4V'
 
-while ret:
- 
-    detections = detections_process(model, frame, tracker)
+def main(output_mode):
 
-    annotated_frame = frame_annotations(detections, frame)
+    curr_in_count = 0
+    curr_out_count = 0
 
-    if (curr_in_count < count_line.in_count or curr_out_count < count_line.out_count):
-        curr_in_count = count_line.in_count
-        curr_out_count = count_line.out_count
-        printout(curr_in_count, curr_out_count)
-    #print(count_line.in_count, count_line.out_count)
-
-    display = annotated_frame
-    display = cv2.resize(display, (1280, 960))
-    cv2.imshow("Vehicle Detection", display)
-    cv2.waitKey(0)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
     ret, frame = cap.read()
- 
-cv2.destroyAllWindows()
-cap.release()
-f.close()
+    
+    #out = cv2.VideoWriter('output.avi', fourcc, 20.0, (1280, 960))
+
+    while ret:
+    
+        detections = detections_process(MODEL, frame, TRACKER)
+
+        annotated_frame = frame_annotations(detections, frame)
+
+        if (curr_in_count < COUNT_LINE.in_count or curr_out_count < COUNT_LINE.out_count):
+            curr_in_count = COUNT_LINE.in_count
+            curr_out_count = COUNT_LINE.out_count
+            print("+1 vehicle has crossed")
+            printout(curr_in_count,curr_out_count)
+        #print(COUNT_LINE.in_count, COUNT_LINE.out_count)
+
+        ## If we want to see video output (positional argument)
+        if output_mode == 1:
+            display = annotated_frame
+            #out.write(display)
+            display = cv2.resize(display, (1280, 960))
+
+            cv2.imshow("Vehicle Detection", display)
+
+            if cv2.waitKey(0) & 0xFF == ord('q'):
+                    break
+        ret, frame = cap.read()
+    
+    cv2.destroyAllWindows()
+    cap.release()
+    F.close()
+
+    #out.release()
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Vehicle counting in test video requires input 1 or 0 to show or not show video output during counting")
+    parser.add_argument(
+        "video_output",
+        type=int,
+        choices=[0, 1],
+        help="Video output during testing: 1 for yes, 0 for no."
+    )
+    args = parser.parse_args()
+    main(args.video_output)
