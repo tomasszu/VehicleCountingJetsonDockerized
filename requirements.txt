@@ -1,5 +1,5 @@
 certifi==2024.2.2
-charset-normalizer==3.3.2
+charset-normalizer==3.0.1
 contourpy==1.2.0
 cycler==0.12.1
 defusedxml==0.7.1
@@ -26,7 +26,7 @@ nvidia-cusparse-cu12==12.1.0.106
 nvidia-nccl-cu12==2.19.3
 nvidia-nvjitlink-cu12==12.3.101
 nvidia-nvtx-cu12==12.1.105
-opencv-python==4.6.0.66
+#opencv-python==4.6.0.66
 opencv-python-headless==4.9.0.80
 packaging==23.2
 pandas==2.2.0

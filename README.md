@@ -43,3 +43,8 @@
 
 <p><b>NB!</b> Use requirements.txt for package dependencies in the virtual environment.</p>
 <p><code>pip install -r requirements.txt  # Install dependencies from the requirements.txt file</code></p>
+
+<h4>Quick Fixes</h4>
+
+<p> If launching on a Jetson (or other non GUI device) comment out opencv-python==4.6.0.66 from the requirements.txt</p>
+

@@ -5,3 +5,17 @@ Total vehicles: 1
 Vehicles inbound: 1
 Vehicles outbound: 0
 }
+
+************Update at 13:35:47*************
+Stats:{
+Total vehicles: 2
+Vehicles inbound: 1
+Vehicles outbound: 1
+}
+
+************Update at 13:39:46*************
+Stats:{
+Total vehicles: 3
+Vehicles inbound: 1
+Vehicles outbound: 2
+}
