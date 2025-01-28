@@ -50,4 +50,4 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /
 USER appuser
 
 # Default command
-CMD ["python", "counting_test_CUDA.py", "0"]
+CMD ["nvidia-smi"]
