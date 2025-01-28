@@ -1,7 +1,7 @@
 <h1>Dockerized Vehicle counting solution</h1>
 <h2>CUDA supported</h2>
 
-<h3>Main Contents</h3>
+<h3>Packages used for this process</h3>
 
 <ul>
 <li> Ultralytics package for YOLO object detection</li>
@@ -9,7 +9,7 @@
 </ul>
 
 
-<h3>Packages used for this process</h3>
+<h3>Main Contents</h3>
 <ul>
 <li> Source code that has ben containerized</li>
 <li> The Dockerfiles</li>
