@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="tutorial.css">
+</head>
+<body>
+
+
+<h1>Tutorial for Docker & co.</h1>
+
+<h2>Docker image building</h2>
+
+<h3>Building arm64 images on x86_64 (different platform)</h3>
+
+<ul>
+    <li>1. Provide --platfrom tag for base image selection</li>
+    <pre>
+        <code> FROM --platform=linux/arm64 nvcr.io/nvidia/l4t-pytorch:r32.7.1-pth1.9-py3 </code>
+    </pre>
+    <li>2. Provide accurate package names for architecture</li>
+    <pre>
+        <code> RUN apt-get install -y python3-opencv </code>
+    </pre>
+    instead of
+    <pre>
+        <code> RUN apt-get install -y opencv-python </code>
+    </pre>
+    <li>3. Install qemu-user-static & Enable Docker Multi-Platform Builds</li>
+    <pre>
+        <code> sudo apt-get install qemu-user-static </code> <code> docker buildx create --use </code>
+    </pre>
+    <li>4. Build the Image with Multi-Platform Support & add the --load flag to make sure the image gets loaded into Docker after building</li>
+    <pre>
+        <code> docker buildx build --platform linux/arm64 -t your_vehicle_counting_for_jetson . --load </code>
+    </pre>
+</ul>
+
+<h3>Running arm64 images on x86_64 (different platform)</h3>
+
+<ul>
+    <li>1. install QEMU in Docker</li>
+    <pre>
+        <code> docker run --rm --privileged multiarch/qemu-user-static --reset -p yes </code>
+    </pre>
+    <li>2. Run container with --platform flag</li>
+    <pre>
+        <code> docker run --rm -it --platform linux/arm64 your_vehicle_counting_for_jetson:latest </code>
+    </pre>
+</ul>
+
+
+
+
+</body>
+</html>
