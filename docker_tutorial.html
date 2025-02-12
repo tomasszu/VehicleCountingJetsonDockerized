@@ -48,7 +48,61 @@
     </pre>
 </ul>
 
+<h2>Docker image running</h2>
+<h3>Running docker images on Jetson</h3>
 
+<ul>
+    <li>Running Docker image with runtime enabled and cuda libraries added to enable GPU usage in the container</li>
+    <pre>
+        <code> docker run --runtime nvidia -it      -v /usr/local/cuda-10.2:/usr/local/cuda      -v /usr/lib/aarch64-linux-gnu:/usr/lib/aarch64-linux-gnu      nvcr.io/nvidia/l4t-pytorch:r32.7.1-pth1.9-py3
+        </code>
+    </pre>
+    <li>Reattach to an existing container</li>
+    <pre>
+        <code> docker exec -it 74c52277a4a8 /bin/bash </code>
+    </pre>
+
+</ul>
+<h2>Docker container tests</h2>
+<h3>Checking packages, CUDA functionality in python</h3>
+
+<ul>
+    <li>Quick pytorch, numpy, cuda availability test</li>
+    <pre>
+        <code>python3 -c "import torch;import numpy;print(torch.cuda.is_available())"</code>
+    </pre>
+    <li>Quick cv2 availability test</li>
+    <pre>
+        <code>python3 -c "import cv2"</code>
+    </pre>
+
+</ul>
+
+<h2>Pip versioning</h2>
+
+<ul>
+    <li>Use pip check to Detect Conflicts</li>
+    <pre>
+        <code>pip check</code>
+    </pre>
+    <li>Install requirements Without Overwriting Existing Packages (--no-deps: Prevents pip from upgrading or reinstalling dependencies that are already installed; --no-cache-dir: Ensures a fresh install, avoiding conflicts)</li>
+    <pre>
+        <code>pip install --no-cache-dir --no-deps -r requirements.txt</code>
+    </pre>
+    <li>Remove Versions from requirements.txt</li>
+    <pre>
+        <code>
+        certifi
+        charset-normalizer
+        contourpy
+        cycler
+        defusedxml
+        filelock
+        fonttools
+        fsspec
+        </code>
+    </pre>
+</ul>
 
 
 </body>

@@ -1,11 +1,11 @@
 certifi
 charset-normalizer
-contourpy
+#contourpy   #No matching distribution found for contourpy
 cycler
 defusedxml
 filelock
 fonttools
-fsspec
+#fsspec     #No matching distribution found
 idna
 Jinja2
 kiwisolver
@@ -14,7 +14,7 @@ mpmath
 networkx
 #opencv-python-headless
 pandas
-psutil
+psutil==5.9.8
 py-cpuinfo
 pyparsing
 python-dateutil
