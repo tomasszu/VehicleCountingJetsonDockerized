@@ -46,6 +46,7 @@ RUN apt install python3-pandas -y
 
 # PRIEKŠ ONNX
 
+# Tā !!!!! UZ Kompja, lai beidzot aizietu GPU vajadzeja onnxruntime-gpu==1.18.0
 # RUN wget https://nvidia.box.com/shared/static/jy7nqva7l88mq9i8bw3g3sklzf4kccn2.whl -O onnxruntime_gpu-1.10.0-cp36-cp36m-linux_aarch64.whl
 # RUN pip3 install onnxruntime_gpu-1.10.0-cp36-cp36m-linux_aarch64.whl
 
